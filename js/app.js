@@ -1,82 +1,57 @@
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+const canvas = document.getElementById('game');
+const context = canvas.getContext('2d');
+const grid = 16;
+let count = 0;
 
-let speed = 7;
+let snake = {
+  x: 160,
+  y: 160,
+  dx: grid,
+  dy: 0,
+  cells: [],
+  maxCells: 4
+};
 
-let tileCount = 20;
-let tileSize = canvas.width / tileCount - 2;
-let headX = 10;
-let headY = 10;
-const snakeParts = [];
-let tailLength = 2;
+let apple = {
+  x: 320,
+  y: 320
+};
 
-let appleX = 5;
-let appleY = 5;
+function loop() {
+  requestAnimationFrame(loop);
 
-let xVelocity=0;
-let yVelocity=0;
-
-function drawGame(){
-  changeSnakePosition();
-  let result = isGameOver();
-  if(result){
+  if (++count < 4) {
     return;
   }
 
-  clearScreen();
+  count = 0;
+  context.clearRect(0, 0, canvas.width, canvas.height);
 
-  checkAppleCollision();
-  drawApple();
-  drawSnake();
+  snake.x += snake.dx;
+  snake.y += snake.dy;
 
-  setTimeout(drawGame, 1000/ speed);
-}
-
-function isGameOver(){
-  let gameOver = false;
-
-  // TODO: Add conditions for game over, like hitting the wall or the snake itself
-
-  return gameOver;
-}
-
-function clearScreen(){
-  ctx.fillStyle = 'black';
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-}
-
-function drawSnake(){
-  ctx.fillStyle = 'green';
-  for(let i=0; i<snakeParts.length; i++){
-    let part = snakeParts[i];
-    ctx.fillRect(part.x * tileCount, part.y * tileCount, tileSize, tileSize);
+  // Implement wrapping of snake position here (covered in the next section)
+  if (snake.x < 0) {
+    snake.x = canvas.width - grid;
   }
-  snakeParts.push({x: headX, y: headY}); //put an item at the end of the list next to the head
-  if(snakeParts.length > tailLength){
-    snakeParts.shift(); // remove the furthest item from the snake parts if we have more than our tail size
+  else if (snake.x >= canvas.width) {
+    snake.x = 0;
   }
 
-  ctx.fillStyle = 'orange';
-  ctx.fillRect(headX * tileCount, headY * tileCount, tileSize, tileSize);
-}
-
-function changeSnakePosition(){
-  headX = headX + xVelocity;
-  headY = headY + yVelocity;
-}
-
-function drawApple(){
-  ctx.fillStyle = 'red';
-  ctx.fillRect(appleX * tileCount, appleY * tileCount, tileSize, tileSize);
-}
-
-function checkAppleCollision(){
-  if(appleX === headX && appleY === headY){
-    appleX = Math.floor(Math.random() * tileCount);
-    appleY = Math.floor(Math.random() * tileCount);
-    tailLength++;
+  if (snake.y < 0) {
+    snake.y = canvas.height - grid;
   }
+  else if (snake.y >= canvas.height) {
+    snake.y = 0;
+  }
+
+  // Update snake cells and length here (covered in the following section)
+
+  // Draw apple and snake here (covered in the drawing section)
+
+  // Check apple collision here (covered in the collision section)
+
+  // Check collision with the snake itself here (covered in the collision section)
 }
 
-// Start game loop
-drawGame();
+requestAnimationFrame(loop);
