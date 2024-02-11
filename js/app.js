@@ -17,6 +17,10 @@ let apple = {
   y: 320
 };
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
 function loop() {
   requestAnimationFrame(loop);
 
@@ -30,7 +34,7 @@ function loop() {
   snake.x += snake.dx;
   snake.y += snake.dy;
 
-  // Implement wrapping of snake position here (covered in the next section)
+  // Implement wrapping of snake position here
   if (snake.x < 0) {
     snake.x = canvas.width - grid;
   }
@@ -45,13 +49,69 @@ function loop() {
     snake.y = 0;
   }
 
-  // Update snake cells and length here (covered in the following section)
+  // Update snake cells and length here
+  snake.cells.unshift({x: snake.x, y: snake.y});
+  if (snake.cells.length > snake.maxCells) {
+    snake.cells.pop();
+  }
 
   // Draw apple and snake here (covered in the drawing section)
+  context.fillStyle = 'red';
+  context.fillRect(apple.x, apple.y, grid-1, grid-1);
+
+  context.fillStyle = 'green';
+  snake.cells.forEach(function(cell, index) {
+    context.fillRect(cell.x, cell.y, grid-1, grid-1);
+  });
 
   // Check apple collision here (covered in the collision section)
+  if (snake.x === apple.x && snake.y === apple.y) {
+    snake.maxCells++;
+    apple.x = getRandomInt(0, 25) * grid;
+    apple.y = getRandomInt(0, 25) * grid;
+  }
 
   // Check collision with the snake itself here (covered in the collision section)
+  snake.cells.forEach(function(cell, index) {
+    for (var i = index + 1; i < snake.cells.length; i++) {
+      if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+        snake.x = 160;
+        snake.y = 160;
+        snake.cells = [];
+        snake.maxCells = 4;
+        snake.dx = grid;
+        snake.dy = 0;
+        apple.x = getRandomInt(0, 25) * grid;
+        apple.y = getRandomInt(0, 25) * grid;
+      }
+    }
+  });
 }
+
+document.addEventListener('keydown', function(e) {
+  switch(e.key) {
+    case "ArrowLeft":
+      if (snake.dx === 0) {
+        snake.dx = -grid; snake.dy = 0;
+      }
+      break;
+    case "ArrowUp":
+      if (snake.dy === 0) {
+        snake.dy = -grid; snake.dx = 0;
+      }
+      break;
+    case "ArrowRight":
+      if (snake.dx === 0) {
+        snake.dx = grid; snake.dy = 0;
+      }
+      break;
+    case "ArrowDown":
+      if (snake.dy === 0) {
+        snake.dy = grid; snake.dx = 0;
+      }
+      break;
+  }
+});
+
 
 requestAnimationFrame(loop);
