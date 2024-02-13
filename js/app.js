@@ -49,13 +49,13 @@ function loop() {
     snake.y = 0;
   }
 
-  // Update snake cells and length here
+  // Update snake cells and length
   snake.cells.unshift({x: snake.x, y: snake.y});
   if (snake.cells.length > snake.maxCells) {
     snake.cells.pop();
   }
 
-  // Draw apple and snake here (covered in the drawing section)
+  // Draw apple and snake
   context.fillStyle = 'red';
   context.fillRect(apple.x, apple.y, grid-1, grid-1);
 
@@ -64,14 +64,14 @@ function loop() {
     context.fillRect(cell.x, cell.y, grid-1, grid-1);
   });
 
-  // Check apple collision here (covered in the collision section)
+  // Check apple collision
   if (snake.x === apple.x && snake.y === apple.y) {
     snake.maxCells++;
     apple.x = getRandomInt(0, 25) * grid;
     apple.y = getRandomInt(0, 25) * grid;
   }
 
-  // Check collision with the snake itself here (covered in the collision section)
+  // Check collision with the snake itself
   snake.cells.forEach(function(cell, index) {
     for (var i = index + 1; i < snake.cells.length; i++) {
       if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
