@@ -2,6 +2,8 @@ const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
 const grid = 16;
 let count = 0;
+let score = 0;
+let highScore = localStorage.getItem('highScore') || 0; // Retrieve high score from local storage or start with 0
 
 let snake = {
   x: 160,
@@ -67,8 +69,19 @@ function loop() {
   // Check apple collision
   if (snake.x === apple.x && snake.y === apple.y) {
     snake.maxCells++;
+    score++;
     apple.x = getRandomInt(0, 25) * grid;
     apple.y = getRandomInt(0, 25) * grid;
+
+    document.getElementById('current-score').textContent = score; // Update current score display
+
+    // Check for high score
+    if (score > highScore) {
+      highScore = score;
+      localStorage.setItem('highScore', highScore); // Save new high score in local storage
+      document.getElementById('high-score').textContent = highScore; // Update high score display
+    }
+
   }
 
   // Check collision with the snake itself
@@ -83,10 +96,15 @@ function loop() {
         snake.dy = 0;
         apple.x = getRandomInt(0, 25) * grid;
         apple.y = getRandomInt(0, 25) * grid;
+        score = 0;
+        document.getElementById('current-score').textContent = score;
       }
     }
   });
 }
+document.addEventListener('DOMContentLoaded', (event) => {
+  document.getElementById('high-score').textContent = highScore;
+});
 
 document.addEventListener('keydown', function(e) {
   if (e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "ArrowRight" || e.key === "ArrowDown") {

@@ -244,7 +244,27 @@ textarea {
     page-break-after: avoid;
   }
 }
+.background-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(to right, #ff7e5f, #feb47b); /* Example gradient */
+}
+.scoreboard {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ffffff;
+  text-align: center;
+}
 
+.scoreboard p {
+  margin: 5px 0;
+  font-size: 18px;
+}
 body {
   display: flex;
   justify-content: center;
@@ -256,3 +276,4 @@ body {
 canvas {
   background-color: #000;
 }
+
