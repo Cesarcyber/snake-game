@@ -89,6 +89,10 @@ function loop() {
 }
 
 document.addEventListener('keydown', function(e) {
+  if (e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "ArrowRight" || e.key === "ArrowDown") {
+
+    e.preventDefault();
+  }
   switch(e.key) {
     case "ArrowLeft":
       if (snake.dx === 0) {
